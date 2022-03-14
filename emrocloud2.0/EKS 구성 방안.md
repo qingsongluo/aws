@@ -51,30 +51,53 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: emrocloud-eks-demo
+  name: emrocloud2.0-dev-eks
   region: ap-northeast-2
 
 kubernetesNetworkConfig:
   serviceIPv4CIDR: 172.17.0.0/24
 #기존 VPC 정보
 vpc:
-  id: "vpc-0dc40907e11f9d59c"
-  cidr: "10.0.0.0/16" 
+  id: "vpc-07de72dabe3e92a24"
+  cidr: "10.100.0.0/16" 
   subnets:
     private:
-      private-one:
-        id: "subnet-08f4a7b5f0d900609"
-        cidr: "10.0.2.0/24"
-      private-two:
-        id: "subnet-08e1db798feaf7815"
-        cidr: "10.0.3.0/24"
-managedNodeGroups:
+      emrocloud-dev-private-1a:
+        id: "subnet-0b6ede2a643c6135e"
+        cidr: "10.100.2.0/24"
+      emrocloud-dev-private-2c:
+        id: "subnet-0e92780fbccb23d64"
+        cidr: "10.100.3.0/24"
+nodeGroups:
   - name: ng-1-workers
     labels: { role: workers }
+    tags:
+      nodegroup-role: worker
     instanceType: t3.xlarge
     desiredCapacity: 2
     volumeSize: 80
     privateNetworking: true
+    ssh: # import public key from file
+      publicKeyPath: /home/eksadmin/.ssh/id_rsa.pub
+    taints:
+    - key: role
+      value: worker
+      effect: NoSchedule
+   - name: ng-2-infra
+    labels: { role: infra }
+    tags:
+      nodegroup-role: infra
+    instanceType: t3.xlarge
+    desiredCapacity: 2
+    volumeSize: 80
+    privateNetworking: true
+    availabilityZones: ap-northeast-2c
+    ssh: # import public key from file
+      publicKeyPath: /home/eksadmin/.ssh/id_rsa.pub
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["all"]
+    logRetentionInDays: 14
 ```
 ##### 1.4.2 EKS SubNets Tag Labeling
 ##### * 모든 서브넷 적용
