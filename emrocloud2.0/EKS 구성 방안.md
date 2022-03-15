@@ -158,6 +158,41 @@ eksctl utils associate-iam-oidc-provider --cluster emrocloud-eks-demo --region=a
 ```
 eksctl utils associate-iam-oidc-provider --cluster emrocloud-eks-demo --region=ap-northeast-2 --approve
 ```
+####  Adding the Amazon EBS add-on (pvc resize)
+```
+aws-ebs-csi-driver add-on 에 
+
+kubectl edit sc gp2
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+allowVolumeExpansion: true # <---- add
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"},"name":"gp2"},"parameters":{"fsType":"ext4","type":"gp2"},"provisioner":"kubernetes.io/aws-ebs","volumeBindingMode":"WaitForFirstConsumer"}
+    storageclass.kubernetes.io/is-default-class: "true"
+  creationTimestamp: "2022-03-15T06:45:59Z"
+  name: gp2
+  resourceVersion: "9698"
+  uid: 11e6bb75-23c6-400f-8f4e-a892a9b06591
+parameters:
+  fsType: ext4
+  type: gp2
+provisioner: kubernetes.io/aws-ebs
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer   
+
+
+### ALLOWVOLUMEEXPANSION true 확인
+NAME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+gp2 (default)   kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   true                   3h42m
+
+
+```
 
 ####  Adding the Amazon VPC CNI Amazon EKS add-on
 ##### * Prerequisites
