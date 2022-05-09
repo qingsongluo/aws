@@ -17,7 +17,8 @@
                 "cloudformation:*",
                 "ec2:*",
                 "autoscaling:*",
-                "eks:*"
+                "eks:*",
+                "logs:PutRetentionPolicy"
             ],
             "Resource": "*"
         }
@@ -43,8 +44,12 @@ https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/eksctl.html
 ```
 
 
-#### 1.4 기존에 VPC에 VPN 연결 된 서비스가 많아서 기존 VPC에 배포 해야 됨
 
+#### 1.4 기존에 VPC에 VPN 연결 된 서비스가 많아서 기존 VPC에 배포 해야 됨
+##### 1.4.0 ssh 노드 하기 위해 키 생성
+```
+ssh-keygen -t rsa
+```
 ##### 1.4.1 eksctl cluster ignition yaml 편집
 ```
 apiVersion: eksctl.io/v1alpha5
