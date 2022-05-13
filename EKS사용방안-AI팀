@@ -8,11 +8,11 @@ https://www.lainyzine.com/ko/article/how-to-install-wsl2-and-use-linux-on-window
 환경 세팅
 WSL2로 설치된 Linux 환경에서 작업. 
 ####aws cli 설치
-```
+'''
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
-```
+'''
 
 ## credentials파일 와 config 정보는 aws console에서 확인 할 수 있음
 `mkdir ~/.aws`
